@@ -57,7 +57,7 @@ namespace Covid
                         .AllowCredentials();
                 }));
 
-            services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<IMailService, GmailService>();
             services.AddControllersWithViews();
             services.AddMemoryCache();
             services.AddHttpContextAccessor();

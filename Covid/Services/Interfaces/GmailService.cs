@@ -1,11 +1,19 @@
 using System;
 using System.Net;
 using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
 
 namespace Covid.Services.Interfaces
 {
-    public class MailService : IMailService
+    public class GmailService : IMailService
     {
+        public GmailService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        private IConfiguration _configuration { get; set; }
+
         public void sendTestMail()
         {
             const string SendMailFrom = "leo.chu@techbodia.com";
@@ -15,9 +23,11 @@ namespace Covid.Services.Interfaces
 
             try
             {
-                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com",587);
+                var SmtpServer =
+                    new SmtpClient(_configuration.GetSection("MailSettings").GetSection("SMTPServer").Value,
+                        int.Parse( _configuration.GetSection("MailSettings").GetSection("SMTPServerPort").Value));
                 SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
-                MailMessage email = new MailMessage();
+                var email = new MailMessage();
                 // START
                 email.From = new MailAddress(SendMailFrom);
                 email.To.Add(sendMailTo);
@@ -47,8 +57,6 @@ namespace Covid.Services.Interfaces
             {
                 Console.WriteLine(ex.ToString());
             }
-
-
         }
     }
 }
