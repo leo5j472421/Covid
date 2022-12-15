@@ -15,6 +15,8 @@ using Covid.Enums;
 using Covid.Filter;
 using Covid.Repositories;
 using Covid.Repositories.Interfaces;
+using Covid.Services;
+using Covid.Services.Interfaces;
 using Newtonsoft.Json.Serialization;
 
 namespace Covid
@@ -55,9 +57,11 @@ namespace Covid
                         .AllowCredentials();
                 }));
 
+            services.AddSingleton<IMailService, MailService>();
             services.AddControllersWithViews();
             services.AddMemoryCache();
             services.AddHttpContextAccessor();
+            services.TryAddSingleton<ILoggerService, LoggerService>();
             // services.TryAddSingleton(_connections);
             services.TryAddScoped<RequestLogFilter>();
             services.TryAddScoped<WebExceptionFilter>();
