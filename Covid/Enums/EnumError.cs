@@ -1,0 +1,68 @@
+﻿using System.ComponentModel;
+
+namespace Covid.Enums
+{
+    public enum EnumError
+    {
+        NoError = 0,
+        InvalidCompanyKey = 1,
+        InvalidRequestFormat = 2,
+        InternalError = 3,
+        InvalidUserName = 4,
+        InvalidCountry = 5,
+        InvalidLanguage = 6,
+        InvalidUserGroup = 7,
+        MaxOddsExceed = 8,
+        InvalidCurrency = 3101,
+        InvalidThemeId = 3102,
+        InvalidWebId = 3103,
+        CreateAgentFailed = 3104,
+        UpdateStatusFail = 3201,
+        UpdateStatusInvalidUsername = 3202,
+        AlreadyUpdateStatus = 3203,
+        InvalidStatus = 3204,
+        InvalidDate = 3205,
+        InvalidMinBet = 3206,
+        InvalidMaxBet = 3207,
+        InvalidMaxPerMatch = 3208,
+        InvalidCasinoTableLimit = 3209,
+        InvalidDomain = 3301,
+        CreateSupportedDomainFailed = 3302,
+        UserDoesntExist = 3303,
+        InvalidAgent = 4101,
+        CreatePlayerFail = 4102,
+        UserExists = 4103,
+        AuthenticationFail = 4201,
+        InvalidTransactionId = 4401,
+        InvalidTransactionAmount = 4402,
+        TransactionFail = 4403,
+        TransactionHasMadeWithSameId = 4404,
+        InsufficientBalance = 4501,
+        RollbackTransactionDueToInsufficientBalance = 4502,
+        RollbackTransactionDueToTimeOutOrUnexpectedError = 4503,
+        ThisTransactionStillProcessing = 4504,
+        CheckTransactionStatusFail = 4601,
+
+        [Description("No Transaction Found")]
+        NoTransactionFound = 4602,
+
+        GetBalanceFail = 4701,
+        FailToStartTrading = 5201,
+        FailToStopTrading = 5301,
+        GetCustomerReportFail = 6101,
+        GetCustomerBetListFail = 6102,
+        NoBetFound = 6666,
+        InvalidSportType = 9527,
+        InvalidMarketType = 9528,
+        WithdrawRequestTooFrequent = 9720,
+        ServiceUnderMaintenanceNow = 10000,
+        InvalidateToken = 10001,
+        IncorrectLogin = 10002,
+        GeneralError = 10003,
+        IsNotSingleBet = 10004,
+        PriceChange = 10005,
+        MinBetUnMet = 10006,
+        InvalidPriceId = 10007,
+        GeneralFailure = 10008
+    }
+}
