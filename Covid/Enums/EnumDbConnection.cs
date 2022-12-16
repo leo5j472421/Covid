@@ -2,6 +2,6 @@
 {
     public enum EnumDbConnection
     {
-        AppMain
+        Mail
     }
 }

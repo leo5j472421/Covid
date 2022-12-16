@@ -11,7 +11,6 @@ namespace Covid.Repositories
     public abstract class RepositoryBase
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
-
         private readonly ILoggerService _loggerService;
         private readonly EnumDbConnection _connectionName;
 

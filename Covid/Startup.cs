@@ -23,15 +23,15 @@ namespace Covid
 {
     public class Startup
     {
-        // private readonly IDbConnectionFactory _connections;
+        private readonly IDbConnectionFactory _connections;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            // _connections = new DbConnectionFactory(new Dictionary<EnumDbConnection, string>
-            // {
-            //     {EnumDbConnection.AppMain, Configuration.GetConnectionString(nameof(EnumDbConnection.AppMain))},
-            // });
+            _connections = new DbConnectionFactory(new Dictionary<EnumDbConnection, string>
+            {
+                {EnumDbConnection.Mail, Configuration.GetConnectionString(nameof(EnumDbConnection.Mail))},
+            });
         }
 
         public IConfiguration Configuration { get; }
@@ -62,7 +62,8 @@ namespace Covid
             services.AddMemoryCache();
             services.AddHttpContextAccessor();
             services.TryAddSingleton<ILoggerService, LoggerService>();
-            // services.TryAddSingleton(_connections);
+            services.TryAddSingleton<IMailRepository, MailRepository>();
+            services.TryAddSingleton(_connections);
             services.TryAddScoped<RequestLogFilter>();
             services.TryAddScoped<WebExceptionFilter>();
             services.AddSwaggerGenNewtonsoftSupport();
