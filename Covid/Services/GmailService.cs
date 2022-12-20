@@ -1,9 +1,13 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
+using Covid.Cache;
 using Covid.Controllers;
 using Covid.Repositories.Interfaces;
 using Covid.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 
 namespace Covid.Services
@@ -68,6 +72,7 @@ namespace Covid.Services
 
         public void SendMail(SendMailRequest request)
         {
+            var cache = new AttachmentCache(_mailRepository);
             var sentMailList = _mailRepository.GetSentMailList(request);
             var mailConfig = GetMailConfig();
             foreach (var mailInfo in sentMailList)
@@ -81,11 +86,17 @@ namespace Covid.Services
                     // START
                     email.From = new MailAddress(mailConfig.MailFrom);
                     email.To.Add(mailInfo.Mail);
-                    // email.CC.Add(SendMailFrom);
-                    email.Subject = mailInfo.Subject.Replace("{Name}",mailInfo.Name);;
-                    email.Body = mailInfo.Body.Replace("{Company}",mailInfo.Company);
+                    email.Subject = mailInfo.Subject.Replace("{Name}", mailInfo.Name);
+                    ;
+                    email.Body = mailInfo.Body.Replace("{Company}", mailInfo.Company);
                     email.IsBodyHtml = true;
-                    //END
+                    var attachments = cache.Get(mailInfo.TemplateId.ToString());
+                    for (var i = 0; i < attachments.Count; i++)
+                    {
+                        email.Body = email.Body.Replace($"(image{i})", attachments[i].ContentId);
+                        email.Attachments.Add(attachments[i]);
+                    }
+
                     SmtpServer.Timeout = 5000;
                     SmtpServer.EnableSsl = true;
                     SmtpServer.UseDefaultCredentials = false;

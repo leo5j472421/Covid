@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Covid.Cache;
 using Covid.Controllers;
 using Covid.Enums;
 using Covid.Repositories.Interfaces;
@@ -15,6 +16,14 @@ namespace Covid.Repositories
         public IEnumerable<MailInfo> GetSentMailList(SendMailRequest request)
         {
             return QuerySP<MailInfo>(spName: "GetSentMailInfo", request);
+        }
+
+        public IEnumerable<AttachmentFromDb> GetAttachments(int id)
+        {
+            return QuerySP<AttachmentFromDb>(spName: "GetAttachments", new
+            {
+                mailTemplateId = id
+            });
         }
     }
 }
