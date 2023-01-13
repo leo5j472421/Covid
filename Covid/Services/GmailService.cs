@@ -74,6 +74,7 @@ namespace Covid.Services
         {
             var cache = new AttachmentCache(_mailRepository);
             var sentMailList = _mailRepository.GetSentMailList(request);
+            var mailTemplate = _mailRepository.GetMailTemplate(request.MailGroup);
             var mailConfig = GetMailConfig();
             foreach (var mailInfo in sentMailList)
             {
@@ -86,11 +87,11 @@ namespace Covid.Services
                     // START
                     email.From = new MailAddress(mailConfig.MailFrom);
                     email.To.Add(mailInfo.Mail);
-                    email.Subject = mailInfo.Subject.Replace("{Name}", mailInfo.Name);
+                    email.Subject = mailTemplate.Subject.Replace("{Name}", mailInfo.Name);
                     ;
-                    email.Body = mailInfo.Body.Replace("{Company}", mailInfo.Company);
+                    email.Body = mailTemplate.Body.Replace("{Company}", mailInfo.Company);
                     email.IsBodyHtml = true;
-                    var attachments = cache.Get(mailInfo.TemplateId.ToString());
+                    var attachments = cache.Get(mailTemplate.TemplateId.ToString());
                     for (var i = 0; i < attachments.Count; i++)
                     {
                         email.Body = email.Body.Replace($"(image{i})", attachments[i].ContentId);
@@ -102,7 +103,8 @@ namespace Covid.Services
                     SmtpServer.UseDefaultCredentials = false;
                     SmtpServer.Credentials = new NetworkCredential(mailConfig.MailFrom, mailConfig.MailPassword);
                     SmtpServer.Send(email);
-                    _logger.Info("Email Successfully Sent");
+                    _mailRepository.SentMail(mailInfo.Mail, request.MailGroup);
+                    _logger.Info($"Email Successfully Sent with mail : {mailInfo.Mail}");
                 }
                 catch (Exception ex)
                 {

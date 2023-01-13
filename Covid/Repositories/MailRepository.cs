@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
 using Covid.Cache;
 using Covid.Controllers;
 using Covid.Enums;
@@ -15,7 +17,11 @@ namespace Covid.Repositories
 
         public IEnumerable<MailInfo> GetSentMailList(SendMailRequest request)
         {
-            return QuerySP<MailInfo>(spName: "GetSentMailInfo", request);
+            return QuerySP<MailInfo>(spName: "GetSentMailInfo", new
+            {
+                isTest = request.IsTest,
+                count = request.Count
+            });
         }
 
         public IEnumerable<AttachmentFromDb> GetAttachments(int id)
@@ -25,5 +31,27 @@ namespace Covid.Repositories
                 mailTemplateId = id
             });
         }
+
+        public MailTemplate GetMailTemplate(int mailGroup)
+        {
+            return QuerySP<MailTemplate>(spName: "GetEmailTemplate", new
+            {
+                mailGroup = mailGroup
+            }).FirstOrDefault();
+        }
+
+        public void SentMail(string email, int mailGroup)
+        {
+            QuerySP<DbResponse>(spName: "SentMail", new
+            {
+                mail = email,
+                mailGroup = mailGroup
+            });
+        }
+    }
+
+    public class DbResponse
+    {
+        public int ErrorCode { get; set; }
     }
 }

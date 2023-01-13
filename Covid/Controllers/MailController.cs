@@ -38,6 +38,7 @@ namespace Covid.Controllers
     {
         public int MailGroup { get; set; }
         public bool IsTest { get; set; }
+        public int Count { get; set; }
     }
 
     public class ApiResponse<T>
