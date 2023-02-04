@@ -99,7 +99,7 @@ namespace Covid.Services
                     }
 
                     SmtpServer.Timeout = 5000;
-                    SmtpServer.EnableSsl = true;
+                    //SmtpServer.EnableSsl = true;
                     SmtpServer.UseDefaultCredentials = false;
                     SmtpServer.Credentials = new NetworkCredential(mailConfig.MailFrom, mailConfig.MailPassword);
                     SmtpServer.Send(email);
